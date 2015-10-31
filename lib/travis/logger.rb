@@ -6,10 +6,10 @@ module Travis
 
     class << self
       def new(io, config = {})
-        configure(config, super(io))
+        configure(super(io), config)
       end
 
-      def configure(config, logger)
+      def configure(logger, config)
         logger.formatter = Format.new(config[:logger])
         logger.level = level_for(config)
         logger
