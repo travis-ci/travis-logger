@@ -1,2 +1,3 @@
 language: ruby
+dist: trusty
 script: bundle exec rspec
