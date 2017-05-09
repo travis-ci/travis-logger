@@ -9,17 +9,6 @@ describe Travis::Logger do
     Travis.stubs(:config).returns(log_level: :info)
   end
 
-  describe '.log_level' do
-    it 'returns Travis.config.log_level if defined' do
-      expect(Travis::Logger.log_level).to eq(:info)
-    end
-
-    it 'returns :debug by default' do
-      Travis.stubs(:respond_to?).with(:config).returns(false)
-      expect(Travis::Logger.log_level).to eq(:debug)
-    end
-  end
-
   describe 'error' do
     context 'with exception' do
       let(:exception) { StandardError.new('kaputt!').tap { |e| e.set_backtrace(['line 1', 'line 2']) } }
