@@ -1,3 +1,5 @@
+require 'time'
+
 module Travis
   class Logger
     class Format
