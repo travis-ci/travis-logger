@@ -23,15 +23,6 @@ module Travis
 
     [:fatal, :error, :warn, :info, :debug].each do |level|
       define_method(level) do |msg, options = {}|
-        if msg.is_a?(Exception)
-          exception = msg
-          msg = "#{exception.class.name}: #{exception.message}"
-          msg << "\n#{exception.backtrace.join("\n")}" if exception.backtrace
-        end
-
-        msg = msg.join("\n") if msg.respond_to?(:join)
-        msg = msg.chomp + "\n"
-
         options.dup.tap do |opts|
           opts.delete(:progname)
 

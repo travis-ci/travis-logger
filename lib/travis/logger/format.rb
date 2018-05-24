@@ -8,9 +8,20 @@ module Travis
       end
 
       def call(severity, time, progname, message)
+        l2met_args = message.l2met_args
+
+        if message.is_a?(Exception)
+          exception = message
+          message = "#{exception.class.name}: #{exception.message}"
+          message << "\n#{exception.backtrace.join("\n")}" if exception.backtrace
+        end
+
+        message = message.join("\n") if message.respond_to?(:join)
+        message = message.chomp + "\n"
+
         send(
           "format_#{config[:format_type] || 'traditional'}",
-          severity, time, progname, message
+          severity, time, progname, message, l2met_args
         )
       end
 
@@ -18,11 +29,11 @@ module Travis
 
       attr_reader :config
 
-      def format_traditional(severity, time, progname, message)
+      def format_traditional(severity, time, progname, message, l2met_args)
         traditional_format % log_record_vars(severity, time, progname, message)
       end
 
-      def format_l2met(severity, time, progname, message)
+      def format_l2met(severity, time, progname, message, message_l2met_args)
         vars = log_record_vars(severity, time, progname, message)
 
         l2met_args = {
@@ -35,9 +46,7 @@ module Travis
         l2met_args[:pid] = vars[:process_id] if config[:process_id]
         l2met_args[:app] = vars[:process_name] if ENV['TRAVIS_PROCESS_NAME']
 
-        if message.respond_to?(:l2met_args)
-          l2met_args.merge!(message.l2met_args)
-        end
+        l2met_args.merge!(message_l2met_args)
 
         l2met_args_to_record(l2met_args).strip + "\n"
       end
