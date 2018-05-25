@@ -65,6 +65,25 @@ describe Travis::Logger::Format do
       expect(log).to_not include('app[hub.1]: ')
     end
 
+    it 'logs a string' do
+      logger.info('hi')
+
+      expect(log).to eq("I hi\n")
+    end
+
+    it 'logs a exception' do
+      exception = StandardError.new('kaputt!').tap { |e| e.set_backtrace(['line 1', 'line 2']) }
+      logger.info(exception)
+
+      expect(log).to eq("I StandardError: kaputt!\nline 1\nline 2\n")
+    end
+
+    it 'logs an array' do
+      logger.info(%w{banana apple orange})
+
+      expect(log).to eq("I banana\napple\norange\n")
+    end
+
     it 'formatter works with message without l2met_args' do
       now = Time.now
 
