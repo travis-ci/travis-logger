@@ -90,6 +90,12 @@ describe Travis::Logger::Format do
       expect(log).to eq("I attr1=value1 attr2=2\n")
     end
 
+    it 'logs any object' do
+      logger.info(Object.new)
+
+      expect(log).to match(/\AI #<Object.+>\n\z/)
+    end
+
     it 'formatter works with message without l2met_args' do
       now = Time.now
 

@@ -19,18 +19,23 @@ module Travis
       def message_to_string(message)
         message = message.join("\n") if message.respond_to?(:join)
 
-        case message
+        message = case message
         when Exception
           exception = message
-          message = "#{exception.class.name}: #{exception.message}"
-          message << "\n#{exception.backtrace.join("\n")}" if exception.backtrace
+          "#{exception.class.name}: #{exception.message}".tap do |s|
+            s << "\n#{exception.backtrace.join("\n")}" if exception.backtrace
+          end
         when Hash
-          message = message.map do |k, v|
+          message.map do |k, v|
             "#{k}=#{v.to_s}"
           end.join(' ')
+        when String
+          message.chomp
+        else
+          message.inspect
         end
 
-        message = message.chomp + "\n"
+        message + "\n"
       end
 
       private
