@@ -84,6 +84,12 @@ describe Travis::Logger::Format do
       expect(log).to eq("I banana\napple\norange\n")
     end
 
+    it 'logs a hash' do
+      logger.info(attr1: 'value1', attr2: 2)
+
+      expect(log).to eq("I attr1=value1 attr2=2\n")
+    end
+
     it 'formatter works with message without l2met_args' do
       now = Time.now
 

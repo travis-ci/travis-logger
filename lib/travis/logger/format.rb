@@ -10,19 +10,27 @@ module Travis
       def call(severity, time, progname, message)
         l2met_args = message.respond_to?(:l2met_args) ? message.l2met_args : {}
 
-        if message.is_a?(Exception)
+        send(
+          "format_#{config[:format_type] || 'traditional'}",
+          severity, time, progname, message_to_string(message), l2met_args
+        )
+      end
+
+      def message_to_string(message)
+        message = message.join("\n") if message.respond_to?(:join)
+
+        case message
+        when Exception
           exception = message
           message = "#{exception.class.name}: #{exception.message}"
           message << "\n#{exception.backtrace.join("\n")}" if exception.backtrace
+        when Hash
+          message = message.map do |k, v|
+            "#{k}=#{v.to_s}"
+          end.join(' ')
         end
 
-        message = message.join("\n") if message.respond_to?(:join)
         message = message.chomp + "\n"
-
-        send(
-          "format_#{config[:format_type] || 'traditional'}",
-          severity, time, progname, message, l2met_args
-        )
       end
 
       private
