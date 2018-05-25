@@ -8,7 +8,7 @@ module Travis
       end
 
       def call(severity, time, progname, message)
-        l2met_args = message.l2met_args
+        l2met_args = message.respond_to?(:l2met_args) ? message.l2met_args : {}
 
         if message.is_a?(Exception)
           exception = message

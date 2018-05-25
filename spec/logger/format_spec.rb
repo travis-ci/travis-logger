@@ -64,6 +64,12 @@ describe Travis::Logger::Format do
       logger.info('message')
       expect(log).to_not include('app[hub.1]: ')
     end
+
+    it 'formatter works with message without l2met_args' do
+      now = Time.now
+
+      expect(formatter.call('DEBUG', now, 'program', 'completely normal message')).to include('completely normal message')
+    end
   end
 
   context 'when using l2met format' do
