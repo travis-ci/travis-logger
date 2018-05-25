@@ -96,6 +96,12 @@ describe Travis::Logger::Format do
       expect(log).to match(/\AI #<Object.+>\n\z/)
     end
 
+    it 'logs frozen objects' do
+      logger.info('hi'.freeze)
+
+      expect(log).to eq("I hi\n")
+    end
+
     it 'formatter works with message without l2met_args' do
       now = Time.now
 

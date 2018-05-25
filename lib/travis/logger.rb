@@ -23,6 +23,7 @@ module Travis
 
     [:fatal, :error, :warn, :info, :debug].each do |level|
       define_method(level) do |msg, options = {}|
+        msg = msg.dup
         options.dup.tap do |opts|
           opts.delete(:progname)
 
