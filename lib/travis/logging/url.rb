@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 
 module Travis
@@ -12,9 +14,9 @@ module Travis
 
       private
 
-        def strip_query(query)
-          query.gsub(/(token|secret|password)=\w*/) { "#{$1}=[secret]" }
-        end
+      def strip_query(query)
+        query.gsub(/(token|secret|password)=\w*/) { "#{::Regexp.last_match(1)}=[secret]" }
+      end
     end
   end
 end

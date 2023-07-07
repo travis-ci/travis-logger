@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 require 'time'
 
 module Travis
@@ -20,20 +22,20 @@ module Travis
         message = message.join("\n") if message.respond_to?(:join)
 
         message = case message
-        when Exception
-          exception = message
-          "#{exception.class.name}: #{exception.message}".tap do |s|
-            s << "\n#{exception.backtrace.join("\n")}" if exception.backtrace
-          end
-        when Hash
-          message.map do |k, v|
-            "#{k}=#{v.to_s}"
-          end.join(' ')
-        when String
-          message.chomp
-        else
-          message.inspect
-        end
+                  when Exception
+                    exception = message
+                    "#{exception.class.name}: #{exception.message}".tap do |s|
+                      s << "\n#{exception.backtrace.join("\n")}" if exception.backtrace
+                    end
+                  when Hash
+                    message.map do |k, v|
+                      "#{k}=#{v}"
+                    end.join(' ')
+                  when String
+                    message.chomp
+                  else
+                    message.inspect
+                  end
 
         message + "\n"
       end
@@ -42,7 +44,7 @@ module Travis
 
       attr_reader :config
 
-      def format_traditional(severity, time, progname, message, l2met_args)
+      def format_traditional(severity, time, progname, message, _l2met_args)
         traditional_format % log_record_vars(severity, time, progname, message)
       end
 
@@ -69,12 +71,12 @@ module Travis
           message: message.to_s,
           process_id: Process.pid,
           process_name: ENV['TRAVIS_PROCESS_NAME'],
-          progname: progname,
-          severity: severity,
+          progname:,
+          severity:,
           severity_downcase: severity.downcase,
           severity_initial: severity[0, 1],
           thread_id: Thread.current.object_id,
-          time: time
+          time:
         }.tap do |v|
           if time_format
             v[:formatted_time] = time.strftime(time_format)
@@ -100,17 +102,17 @@ module Travis
       end
 
       def builtin_l2met_args
-        @builtin_l2met_args ||= %w(time level msg).map(&:to_sym)
+        @builtin_l2met_args ||= %w[time level msg].map(&:to_sym)
       end
 
       def traditional_format
         @traditional_format ||= ''.tap do |s|
-          s << '%{formatted_time} ' if time_format
-          s << '%{severity_initial} '
-          s << 'app[%{process_name}]: ' if ENV['TRAVIS_PROCESS_NAME']
-          s << 'PID=%{process_id} ' if config[:process_id]
-          s << 'TID=%{thread_id} ' if config[:thread_id]
-          s << '%{message}'
+          s << '%<formatted_time>s ' if time_format
+          s << '%<severity_initial>s '
+          s << 'app[%<process_name>s]: ' if ENV['TRAVIS_PROCESS_NAME']
+          s << 'PID=%<process_id>s ' if config[:process_id]
+          s << 'TID=%<thread_id>s ' if config[:thread_id]
+          s << '%<message>s'
         end
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'travis/logging/url'
 
 describe Travis::Logging::Url do
