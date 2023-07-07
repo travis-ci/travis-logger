@@ -7,7 +7,7 @@ describe Travis::Logger do
   let(:log)    { io.string }
   let(:logger) { described_class.new(io) }
 
-  before :each do
+  before do
     Travis.stubs(:config).returns(log_level: :info)
   end
 

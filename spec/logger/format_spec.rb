@@ -9,7 +9,7 @@ describe Travis::Logger::Format do
   let(:logger) { Travis::Logger.new(io).tap { |logger| logger.formatter = formatter } }
 
   context 'when using traditional format' do
-    before :each do
+    before do
       ENV.delete('TRAVIS_PROCESS_NAME')
     end
 
@@ -99,7 +99,7 @@ describe Travis::Logger::Format do
     end
 
     it 'logs frozen objects' do
-      logger.info('hi'.freeze)
+      logger.info('hi')
 
       expect(log).to eq("I hi\n")
     end
@@ -115,7 +115,7 @@ describe Travis::Logger::Format do
   context 'when using l2met format' do
     let(:formatter) { described_class.new(format_type: 'l2met') }
 
-    before :each do
+    before do
       ENV.delete('TRAVIS_PROCESS_NAME')
     end
 

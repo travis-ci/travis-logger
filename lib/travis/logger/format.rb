@@ -37,7 +37,7 @@ module Travis
                     message.inspect
                   end
 
-        message + "\n"
+        "#{message}\n"
       end
 
       private
@@ -63,7 +63,7 @@ module Travis
 
         l2met_args.merge!(message_l2met_args)
 
-        l2met_args_to_record(l2met_args).strip + "\n"
+        "#{l2met_args_to_record(l2met_args).strip}\n"
       end
 
       def log_record_vars(severity, time, progname, message)

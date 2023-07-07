@@ -3,7 +3,7 @@
 require 'logger'
 
 module Travis
-  class Logger < ::Logger # TODO
+  class Logger < ::Logger
     require 'travis/logger/format'
 
     class << self
