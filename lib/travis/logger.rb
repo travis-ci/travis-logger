@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'logger'
 
 module Travis
-  class Logger < ::Logger # TODO
+  class Logger < ::Logger
     require 'travis/logger/format'
 
     class << self
@@ -21,7 +23,7 @@ module Travis
       end
     end
 
-    [:fatal, :error, :warn, :info, :debug].each do |level|
+    %i[fatal error warn info debug].each do |level|
       define_method(level) do |msg, options = {}|
         msg = msg.dup
         options.dup.tap do |opts|

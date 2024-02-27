@@ -1,11 +1,13 @@
+# frozen_string_literal: false
+
 require 'stringio'
 
 describe Travis::Logger do
   let(:io)     { StringIO.new }
   let(:log)    { io.string }
-  let(:logger) { Travis::Logger.new(io) }
+  let(:logger) { described_class.new(io) }
 
-  before :each do
+  before do
     Travis.stubs(:config).returns(log_level: :info)
   end
 
@@ -20,8 +22,8 @@ describe Travis::Logger do
 
       it 'logs the backtrace' do
         logger.error(exception)
-        expect(io.string).to include("line 1")
-        expect(io.string).to include("line 2")
+        expect(io.string).to include('line 1')
+        expect(io.string).to include('line 2')
       end
     end
   end

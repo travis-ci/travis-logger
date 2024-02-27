@@ -1,8 +1,6 @@
 language: ruby
-dist: trusty
+dist: focal
 cache: bundler
 script: bundle exec rspec
 rvm:
-  - 2.3.1
-  - 2.4.4
-  - 2.5.1
+  - 3.2.2
